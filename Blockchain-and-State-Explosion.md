@@ -1,6 +1,3 @@
-March 22, 2019. Originator : Jan Xie
-
-Translator : Mingrui Jiang, JiaYi, Clare, Kryptohenry
 
 > If Layer 1 should be focused on state rather than calculation, then we need to understand what the state of the blockchain is when designing Layer 1. Only by understanding what the state is, can we understand what the state explosion is.
 
@@ -127,3 +124,8 @@ But there are two problems with this Storage Rent solution:
 - Ethereum's state model is a shared model but not First-class State. Let’s take ERC20 Token as an example, the assets of all users record in the storage of a single ERC20 contract. In this case, who should pay the state rent?
 
 Solving the state explosion problem is also one of the goals of Nervos CKB, for this purpose, CKB is taking a completely different way with much more changes. 
+
+
+
+Originator (March 22, 2019) : [Jan Xie](https://talk.nervos.org/t/topic/1515)
+Translator : Mingrui Jiang, JiaYi, Clare, Kryptohenry
