@@ -14,7 +14,7 @@ The role of the consensus protocol is to ensure that the current state seen by e
 
 As long as the history is the same (that is, all transactions are sorted in the same order) and the transactions are processed in the same way（the transactions are processed in the same deterministic virtual machine), then the current state of the transaction is obviously the same. When we say that "Blockchain is immutable", it refers to the fact that the history of blockchains cannot be tampered with. But in fact, the state of the blockchain is constantly changing.
 
-The  interesting thing is, all kinds of blockchains have different ways to preserve its history and state, and those differences formed their own characteristics. Since the topic discussed in this article is state, and the historical data affecting the state is mainly the transaction (rather than the block header), the following discussion of history will focus on transactions instead of block headers.
+The interesting thing is, all kinds of blockchains have different ways to preserve its history and state, and those differences formed their own characteristics. Since the topic discussed in this article is the state, and the historical data affecting the state is mainly the transaction (rather than the block header), the following discussion of history will focus on transactions instead of block headers.
 
 
 ## Example of Bitcoin
@@ -32,7 +32,7 @@ In the Bitcoin network, each block and each UTXO continue to occupy the node's s
 
 ## Example of Ethereum
 
-Ethereum’s state, also known as world state, is the Ethereum ledger’s current state. Ethereum’s state is a Merkle tree constructed from nodes of hashes (each leaf node is an account). Each account stores both the account balance (the amount of ether) and smart contract data (e.g. data for a cryptokitty). Ethereum’s state can be viewed as a long ledger,  and the first column contains account name, the second column contains account balance and the third column contains smart contract data on this ledger .
+Ethereum’s state, also known as world state, is the Ethereum ledger’s current state. Ethereum’s state is a Merkle tree constructed from nodes of hashes (each leaf node is an account). Each account stores both the account balance (the amount of ether) and smart contract data (e.g. data for a cryptokitty). Ethereum’s state can be viewed as a long ledger,  and the first column contains account name, the second column contains account balance and the third column contains smart contract data on this ledger.
 
 Ethereum’s history is also constructed from transactions, a simplified view of a transaction’s internal structure is:
 
@@ -46,7 +46,7 @@ The way a transaction modifies the state works like this, EVM finds the transact
 
 1. Calculating new balance of destination account based on the transaction value
 
-2. Transfer the payload data of transaction to the target smartcontract and the smartcontract would execute the logics stored in the contract and use this received data as input for the contract. During the execution, any account’s state (contract or EOA) could be modified and updated to a new state.
+2. Transfer the payload data of transaction to the target smart contract and the smart contract would execute the logic stored in the contract and use this received data as input for the contract. During the execution, any account’s state (contract or EOA) could be modified and updated to a new state.
 
 3. Construct new leaf node to store the new state, and update the Merkle tree.
 
@@ -54,28 +54,28 @@ The way a transaction modifies the state works like this, EVM finds the transact
 
 As we have shown, Ethereum’s history and transaction structure is very different compared to Bitcoin. Ethereum’s state is constructed from accounts, and a transaction is made up of information that triggers account modification. The state and transaction each records completely different kinds of data, so there is no superset or subset relationship between them, which means history and state includes data from two different dimensions, and transaction history size and state size does not have any causal relationship. 
 
-After a transaction modified the state, not only new state is created (the leaf nodes with solid line), but old state is also stored (the leaf nodes with dashed line) as historical states, thus Ethereum’s history contains both transactions and historical states. Because history and state belongs to different dimensions, Ethereum’s block headers include both merkle root containing transactions and merkle root containing state. (Bonus points: EOS uses a model similar to Ethereum’s account model, but the block header doesn’t include Merkle Tree Root containing state, is this a good thing or not?)
+After a transaction modified the state, not only new state is created (the leaf nodes with solid line), but old state is also stored (the leaf nodes with dashed line) as historical states, thus Ethereum’s history contains both transactions and historical states. Because history and state belongs to different dimensions, Ethereum’s block headers include both Merkle root containing transactions and Merkle root containing state. (Bonus points: EOS uses a model similar to Ethereum’s account model, but the block header doesn’t include Merkle Tree Root containing state, is this a good thing or not?)
 
 In Ethereum, every block and every account will continuously occupy a node’s disk space. Ethereum nodes have many different modes of syncing, and all history and state are saved under Archive mode. History includes transaction history and state history, and the total amount of data has surpassed 2 TB; Under default mode, historical state is pruned, only transaction history and current state is stored locally, so the total data size is about 170 GB, where transaction history is about 160 GB and current state is about 10 GB. 
 
-All cost in Ethereum is managed by the gas fee model, different transaction size consumes corresponding gas. And the gas consumed by each EVM instruction not only takes into account the computational overhead, but also takes into account the storage overhead. Through the gaslimit of each block, the growth rate of history and state is indirectly limited.
+All cost in Ethereum is managed by the gas fee model, different transaction size consumes corresponding gas. And the gas consumed by each EVM instruction not only takes into account the computational overhead, but also takes into account the storage overhead. Through the gas limit of each block, the growth rate of history and state is indirectly limited.
 
 P.S. A common misunderstanding is that, Ethereum’s “blockchain size” is already larger than 1 TB. But from the above analysis we can see that “blockchain” size is a very vague definition.If we counted including historical state, then it is indeed more than 1 TB. 
 
-But for full nodes, discarding the historical states does not cause any problem. Because every historial state can be recalculated (without considering the computation time) as long as there is the Genesis and transaction history. The real meaningful data is the amount of data that must be stored on a full node, for Bitcoin it’s 200 GB, for Ethereum it’s 170 GB. They are basically in the same amount, an this amount of data can be easily stored on a regular cloud host. So people’s observation that the number of Ethereum full nodes is decreasing is not due to the increasing storage need (the root cause is the cost of computation during syncing, but we’ll not go into too much details here). Considering Ethereum’s historical length (the gap between the current block timestamp and the genesis block timestamp) is less than half of bitcoin, we can see that Ethereum’s history and state growth is much faster.
+But for full nodes, discarding the historical states does not cause any problem. Because every historical state can be recalculated (without considering the computation time) as long as there are the Genesis and transaction history. The real meaningful data is the amount of data that must be stored on a full node, for Bitcoin it’s 200 GB, for Ethereum it’s 170 GB. They are basically in the same amount, and this amount of data can be easily stored on a regular cloud host. So people’s observation that the number of Ethereum full nodes is decreasing is not due to the increasing storage need (the root cause is the cost of computation during syncing, but we’ll not go into too many details here). Considering Ethereum’s historical length (the gap between the current block timestamp and the genesis block timestamp) is less than half of bitcoin, we can see that Ethereum’s history and state growth is much faster.
 
 
 ## The Tragedy of (Storage) Commons :
 
-Tragedy of the commons is a term used to describe a situation where individual users with no restriction will deplete a system’s common resource.  blockchain nodes share their disk space to store transactions and states. This is precisely a kind of common resource.
+The tragedy of the commons is a term used to describe a situation where individual users with no restriction will deplete a system’s common resource.  blockchain nodes share their disk space to store transactions and states. This is precisely a kind of common resource.
 
 (Storage all the nodes pay for saving history and state in a blockchain system is such a common resource. )
 
 Blockchain nodes use three types of resources to process transactions: CPU, disk space and network bandwidth. CPU and bandwidth are resources that each block will refresh. We can think that there are as many CPUs and bandwidths available in each block interval. It means the previous block’s CPU and bandwidth consumption will not affect the amount of CPU and bandwidth in the next block. 
 
-For these kind of refreshable resources, we can compensate the node with a one-time transaction fee (for the correlation between handling fee and calculation complexity and transaction size, please refer to RFC0015 Appendix 1).
+For the kind of refreshable resources, we can compensate the node with a one-time transaction fee (for the correlation between handling fee and calculation complexity and transaction size, please refer to RFC0015 Appendix 1).
 
-Different with CPU and network bandwidth, disk space is a long-term occupied resource. The disk space occupied of one block can not be used by a later user unless it is released by the previous owner. A node will continuously keep the occupied disk space alive but the user of the occupied space doesn’t have to pay rent (keep in mind transaction fees are only a one time payment). It means users only have to make a small one time payment when writing data to the blockchain. Afterwards they essentially have permanent usage rights to a storage system with more availability than Amazon S3. This kind of infinite and permanent storage cost is shared by all the full nodes in the blockchain network.
+Different from CPU and network bandwidth, disk space is a long-term occupied resource. The disk space occupied of one block cannot be used by a later user unless it is released by the previous owner. A node will continuously keep the occupied disk space alive but the user of the occupied space doesn’t have to pay rent (keep in mind transaction fees are only a one-time payment). It means users only have to make a small one-time payment when writing data to the blockchain. Afterwards, they essentially have permanent usage rights to a storage system with more availability than Amazon S3. This kind of infinite and permanent storage cost is shared by all the full nodes in the blockchain network.
 
 Because all kinds of DApps operate on the Ethereum blockchain, the phenomenon of The Tragedy of (Storage) Commons is more widespread in Ethereum. For example, at block 5700001 (May 30, 2018), the top 5 smart contracts ranked by storage usage are:
 
@@ -85,7 +85,7 @@ Because all kinds of DApps operate on the Ethereum blockchain, the phenomenon of
 4. ENS, 1.92%
 5. EOS Sale, 1.73%
 
-The funny fact is the last one EOS Sale. Even though EOS Sale has already concluded and EOS tokens are already transacting on the EOS chain, the disk space used by EOS Sale has became a permanent part of an Ethereum full node, as a result part of a full node’s disk resource is continuously being wasted.
+The funny fact is the last one EOS Sale. Even though EOS Sale has already concluded and EOS tokens are already transacting on the EOS chain, the disk space used by EOS Sale has become a permanent part of an Ethereum full node, as a result part of a full node’s disk resource is continuously being wasted.
 
 We can already observe that without management, intentional or not, blockchain’s disk space is being abused. 
 
@@ -93,7 +93,7 @@ In a well-designed economic model, the user should and must bear the cost of sto
 
 ## State Explosion
 
-Both historical state or current state consume the storage resources. According to the analysis we can see that  (the state model of other blockchains can basically be summarized as one of them ) , although Bitcoin and Ethereum managed the growth of history and state,  but they didn't control the total size of historical state and current state, and the data will accumulate continually. In this way it will cost more and more disk space for a full node to run in the blockchain system, and more disk space means much more cost and requirement. Apparently this would make less miner run the full node and thus affect the decentralization of the blockchain. And this is the last thing we want to see.
+Both historical state or current state consume the storage resources. According to the analysis, we can see that  (the state model of other blockchains can basically be summarized as one of them ), although Bitcoin and Ethereum managed the growth of history and state,  they didn't control the total size of the historical state and current state, and the data will accumulate continually. In this way, it will cost more and more disk space for a full node to run in the blockchain system, and more disk space means much more cost and requirement. Apparently, this would make less miner run the full node and thus affect the decentralization of the blockchain. And this is the last thing we want to see.
 
 You might ask is there any possibility that the improvement of the hardware will exceed the accumulation of historical state and current state? My answer is the possibility is very low.
 
@@ -105,13 +105,13 @@ When we solve the scalability problem, and the blockchain technology really gets
 
 This is the state explosion problem, we classify it as a post-scalability problem. Because it will emerge  obviously after solving the scalability problem. We noticed this problem when doing the permission chain project, because the performance of the permission chain is much higher than the public chain, and it’s just in the post-scalability phase. (Question : How to solve the state explosion problem in permission chain?)
 
-Relatively speaking, handeling the accumulation of historical data is easy. We can compress these states by decentralized Checkpoint or zero-knowledge proof in the future. And we can even drop the historical state and still keep the blockchain running normally. Handel the accumulation of the current state is a lot more hard because it is the necessary data to run the full node.
+Relatively speaking, handling the accumulation of historical data is easy. We can compress these states by decentralized Checkpoint or zero-knowledge proof in the future. And we can even drop the historical state and still keep the blockchain running normally. Handel the accumulation of the current state is a lot harder because it is the necessary data to run the full node.
 
-Some Blockchain projects have seen this problem and proposed some solutions. EOS RAM is a useful attempt to solve the state explosion problem: RAM represents the available memory resources for the super node server, whether account, contract status or code should takes a certain amount of EOSRAM to run.
+Some Blockchain projects have seen this problem and proposed some solutions. EOS RAM is a useful attempt to solve the state explosion problem: RAM represents the available memory resources for the supernode server, whether account, contract status or code should take a certain amount of EOS RAM to run.
 
 But the design of RAM also has problems. It needs to be purchased through the built-in trading market, it is not transferable, it cannot be rented, and the short-term memory demand in the contract execution process and the long-term storage requirement of the contract state are mixed together.
 
-And the total amount of RAM has no fixed rules, it more depends on the hardware configuration that the super node can withstand, but not the cost of the consensus space.
+And the total amount of RAM has no fixed rules, it more depends on the hardware configuration that the supernode can withstand, but not the cost of the consensus space.
 
 Ethereum community also noticed this problem and proposed Storage Rent solution: requiring users to prepay a rent for the storage resources, which will continue to consume the rent when use the storage resource. The longer it takes, the more rent the user needs to pay.
 
@@ -127,4 +127,4 @@ Solving the state explosion problem is also one of the goals of Nervos CKB, for 
 
 Originator (March 22, 2019) : [Jan Xie](https://talk.nervos.org/t/topic/1515)
 
-Translator : Mingrui Jiang, JiaYi, Clare, Kryptohenry
+Translator: Mingrui Jiang, JiaYi, Clare, Kryptohenry
