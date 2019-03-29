@@ -23,9 +23,7 @@ The state of Bitcoin refers to the current state of the Bitcoin ledger. The stat
 
 Bitcoin's history consists of a series of transactions which include input and output. The way to change the state of a transaction is to mark some UTXO (those referenced by the transaction input) contained in the current state as spent and remove them from the UTXO collection, and then add some new UTXO (the output of this transaction) to this collection.
 
-
-pic.
-
+![](images/pic_1.png)
 
 From the diagram, we can see that Bitcoin Transaction Output(TXO, Transaction Output) is exactly the UTXO mentioned above. UTXO is just a TXO at a special stage (not yet spent). The components that make up the Bitcoin state (UTXO) are also the components that make up the transaction (TXO), thus Bitcoin has an amazing feature: The state at any moment is a subset of history, and the data types contained in history and state are of the same dimension. The history of transaction (the set of all packaged transactions, that is the set of all generated TXOs) is  the history of the state (the set of UTXO collections for each block, also the collection of all generated TXOs) and the history of Bitcoin only include transactions.
 
@@ -52,7 +50,7 @@ The way a transaction modifies the state works like this, EVM finds the transact
 
 3. Construct new leaf node to store the new state, and update the Merkle tree.
 
-pic.
+![](images/pic_2.png)
 
 As we have shown, Ethereum’s history and transaction structure is very different compared to Bitcoin. Ethereum’s state is constructed from accounts, and a transaction is made up of information that triggers account modification. The state and transaction each records completely different kinds of data, so there is no superset or subset relationship between them, which means history and state includes data from two different dimensions, and transaction history size and state size does not have any causal relationship. 
 
@@ -99,7 +97,7 @@ Both historical state or current state consume the storage resources. According 
 
 You might ask is there any possibility that the improvement of the hardware will exceed the accumulation of historical state and current state? My answer is the possibility is very low.
 
-pic.
+![](images/storage_growth.png)
 
 We can see the growth of Ethereum network in this sheet, the amount of state accumulation has grown exponentially. Bitcoin has accumulated from 0 to 3GB in 10 years; But Ethereum has accumulated from 0 to 10GB in 4 years; The current situation is that we have not solved the Scalability problem of the blockchain yet, and that is, the growth rate is just under the condition of blockchain is still a niche technology.
 
