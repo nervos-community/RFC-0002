@@ -29,7 +29,7 @@ pic.
 
 From the diagram, we can see that Bitcoin Transaction Output(TXO, Transaction Output) is exactly the UTXO mentioned above. UTXO is just a TXO at a special stage (not yet spent). The components that make up the Bitcoin state (UTXO) are also the components that make up the transaction (TXO), thus Bitcoin has an amazing feature: The state at any moment is a subset of history, and the data types contained in history and state are of the same dimension. The history of transaction (the set of all packaged transactions, that is the set of all generated TXOs) is  the history of the state (the set of UTXO collections for each block, also the collection of all generated TXOs) and the history of Bitcoin only include transactions.
 
-In the Bitcoin network, each block and each UTXO continue to occupy the node's storage space. At present, the size of Bitcoin's entire history (the size of all blocks combined) is about 200G (https://www.blockchain.com/en/charts/blocks-size), and the size of state is only ~3G (consisting of ~50 million UTXO components) (https://statoshi.info/dashboard/db/unspent-transaction-output-set). Bitcoin manages the historical growth rate well by limiting each block size. Due to the subset relationship between its history and state,the size of the state data must be much smaller than that of the historical data. Therefore, the state growth is also indirectly managed by block size.
+In the Bitcoin network, each block and each UTXO continue to occupy the node's storage space. At present, [the size of Bitcoin's entire history (the size of all blocks combined) is about 200G](https://www.blockchain.com/en/charts/blocks-size), [and the size of state is only ~3G (consisting of ~50 million UTXO components)](https://statoshi.info/dashboard/db/unspent-transaction-output-set). Bitcoin manages the historical growth rate well by limiting each block size. Due to the subset relationship between its history and state,the size of the state data must be much smaller than that of the historical data. Therefore, the state growth is also indirectly managed by block size.
 
 
 ## Example of Ethereum
@@ -128,4 +128,5 @@ Solving the state explosion problem is also one of the goals of Nervos CKB, for 
 
 
 Originator (March 22, 2019) : [Jan Xie](https://talk.nervos.org/t/topic/1515)
+
 Translator : Mingrui Jiang, JiaYi, Clare, Kryptohenry
