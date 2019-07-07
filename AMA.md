@@ -1,6 +1,7 @@
 
 ## [AMA] Jan Xie and Kevin Wang, Founders of Nervos, and Xuejie Xiao, Core Developer of Nervos
 
+
 Nervos was invited to answer questions during a private AMA on Telegram. This is an edited transcript of the conversation. 
 
  **Group**: Alright everyone, let's do this—please give a warm welcome to Jan, Kevin, and Xuejie of Nervos! As a reminder for everyone participating, please keep the discussion respectful at all times. Could you start off by giving us a brief bio touching on your backgrounds as well as how you got started in crypto? And then a short overview of Nervos, how the idea came to be, and how it’s going so far? We’ll then be off to the races with questions.
